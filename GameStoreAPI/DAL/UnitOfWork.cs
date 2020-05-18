@@ -11,15 +11,16 @@ namespace DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppDbContext _context;
-        private IGameRepository<Game> _gameRepository;
-   
-        public UnitOfWork(AppDbContext dbContext)
+        private readonly GameStoreContext _context;
+        private IGameRepository _gameRepository;
+        private IGenreRepository _genreRepository;
+
+        public UnitOfWork(GameStoreContext dbContext)
         {
             _context = dbContext;
         }
 
-        public IGameRepository<Game> GameRepository
+        public IGameRepository GameRepository
         {
             get
             {
@@ -28,6 +29,18 @@ namespace DAL
                     _gameRepository = new GameRepository(_context);
                 }
                 return _gameRepository;
+            }
+        }
+
+        public IGenreRepository GenreRepository
+        {
+            get
+            {
+                if (_genreRepository == null)
+                {
+                    _genreRepository = new GenreRepository(_context);
+                }
+                return _genreRepository;
             }
         }
 
@@ -55,10 +68,6 @@ namespace DAL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        ~UnitOfWork()
-        {
-            _context.Dispose();
-        }
+     
     }
 }

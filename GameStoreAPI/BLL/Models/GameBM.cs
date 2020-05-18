@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BLL.Models
 {
-    public class GameBLL
+    public class GameBM
     {
         public int Id { get; set; }
 

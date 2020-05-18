@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Extensions;
-using API.Helpers;
+using API.Mapping;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,13 +29,13 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DAL.EF.AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddControllers();
 
-            services.AddBllServices();
+            services.ConfigureDALDependencies(Configuration.GetConnectionString("DefaultConnection"));
 
-            services.AddAutoMapper(c => c.AddProfile<MapingProfiles>(), typeof(Startup));
+            services.ConfigureBLLDependencies();
+
+            services.ConfigureAutoMapper();
 
             services.AddSwaggerGen(c =>
             {
